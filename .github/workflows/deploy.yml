@@ -3,10 +3,10 @@ name: Build and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change this if your default branch is different
+      - main  # Trigger on push to main branch
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -15,7 +15,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # Match this with your local Node.js version
+        node-version: '20'  
 
     - name: Install dependencies
       run: npm install
@@ -26,8 +26,13 @@ jobs:
         NODE_ENV: production
 
     - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@4.1.4
-      with:
-        branch: main  # The branch the action should deploy to.
-        folder: dist      # The folder the action should deploy.
-
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git checkout -b gh-pages
+        git rm -rf .  # Remove all files from the previous branch
+        cp -R dist/* .  # Assuming 'dist' is your build directory, adjust as necessary
+        touch .nojekyll  # Prevents GitHub from processing your site with Jekyll
+        git add .
+        git commit -m "Deploy to GitHub Pages"
+        git push --force origin gh-pages
