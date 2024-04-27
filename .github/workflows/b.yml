@@ -29,6 +29,7 @@ jobs:
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git checkout --orphan gh-pages  # Creates a new orphan branch for the GitHub Pages deployment.
+        git rm -rf .  # Clear out old files.
         cp -R dist/* .  # Copy build output to root of repository.
         touch .nojekyll  # If using Jekyll themes or processing, prevent it by adding .nojekyll.
         git add .  # Add all files for commit.
