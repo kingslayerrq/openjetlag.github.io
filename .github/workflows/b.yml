@@ -33,4 +33,4 @@ jobs:
         touch .nojekyll  # If using Jekyll themes or processing, prevent it by adding .nojekyll.
         git add .  # Add all files for commit.
         git commit -m "Deploy to GitHub Pages"  # Commit changes.
-        git push --force origin gh-pages  # Force push to the gh-pages branch.
+        git push --force origin gh-pages 
