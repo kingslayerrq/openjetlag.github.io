@@ -3,11 +3,12 @@ name: Build and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -15,26 +16,16 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16' 
+        node-version: '16'  # Use the Node.js version that matches your local development environment
 
     - name: Install dependencies
       run: npm install
 
     - name: Build
-      run: npm run build
-    
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: built-static-files  # This is the name of the artifact as it will appear in GitHub
-        path: dist/**/*  # This specifies the directory and file pattern to include in the artifact
+      run: npm run build  # This command generates the 'dist' folder
 
     - name: Deploy to GitHub Pages
-      run: |
-        git config --global user.name 'GitHub Actions'
-        git config --global user.email 'actions@github.com'
-        git checkout --orphan gh-pages 
-        cp -R dist/* ./
-        git add .
-        git commit -m "Deploy to GitHub Pages"
-        git push --force origin gh-pages
+      uses: JamesIves/github-pages-deploy-action@v4.1.4
+      with:
+        branch: gh-pages  # The branch to deploy to
+        folder: dist  # The folder to deploy
