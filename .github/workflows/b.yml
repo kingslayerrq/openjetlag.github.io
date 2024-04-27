@@ -1,0 +1,41 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push events to the main branch.
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # The type of runner that the job will run on.
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2  # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Specify the Node.js version you are using.
+
+    - name: Install Dependencies
+      run: npm install  # Install project dependencies.
+
+    - name: Build
+      run: npm run build  # Run the build script defined in package.json, this will produce static files in the 'dist' directory.
+
+    - name: Deploy to GitHub Pages
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git checkout --orphan gh-pages  # Creates a new orphan branch for the GitHub Pages deployment.
+        cp -R dist/* .  # Copy build output to root of repository.
+        touch .nojekyll  # If using Jekyll themes or processing, prevent it by adding .nojekyll.
+        git add .  # Add all files for commit.
+        git commit -m "Deploy to GitHub Pages"  # Commit changes.
+        git push --force origin gh-pages 
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages  # The branch the action should deploy to
+        folder: dist  # The folder the action should deploy from
