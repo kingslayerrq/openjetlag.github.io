@@ -24,12 +24,6 @@ jobs:
     - name: Build
       run: npm run build  # Run the build script defined in package.json, this will produce static files in the 'dist' directory.
 
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: built-static-files  # This is the name of the artifact as it will appear in GitHub
-        path: dist/**/*  # This specifies the directory and file pattern to include in the artifact
-
     - name: Deploy to GitHub Pages
       run: |
         git config --global user.name 'GitHub Actions'
