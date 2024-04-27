@@ -28,4 +28,4 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4.1.4
       with:
         branch: gh-pages  # The branch to deploy to
-        folder: dist  # The folder to deploy
+        folder: dist  
